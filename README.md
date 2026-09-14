@@ -58,13 +58,47 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.
 - **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
+## Stack
+
+Plain **Vite + React SPA** — no SSR, no server runtime.
+
+- React 19 + TypeScript, bundled by Vite into a fully static `dist/`
+- **React Router** for client-side routing: `/`, `/auth` (aliases `/sign-in`, `/sign-up`), `/app` (auth-guarded), and a catch-all 404
+- Tailwind CSS v4 + shadcn/ui
+- Supabase JS for auth, called directly from the browser
+
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
 npm i
-npm run dev
+npm run dev        # http://localhost:8080
+npm run typecheck
+npm run build      # -> dist/
+npm run preview    # serve dist/ locally, with SPA fallback
 ```
+
+### Environment variables
+
+Only `VITE_`-prefixed variables reach the browser bundle; they are inlined at
+build time, so they must be set **before** `vite build` runs.
+
+| Variable | Purpose |
+| --- | --- |
+| `VITE_SUPABASE_URL` | Supabase project URL |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable (anon) key |
+
+## Deploying to Vercel
+
+Vercel picks the settings up from `vercel.json`:
+
+- Build command `vite build`, output directory `dist`
+- A rewrite sending every non-asset path to `/index.html`, so deep links such as
+  `/app` are resolved by React Router on the client instead of 404-ing
+- Long-lived immutable caching for the hashed files under `/assets`
+
+Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the Vercel
+project's Environment Variables for every environment you deploy.

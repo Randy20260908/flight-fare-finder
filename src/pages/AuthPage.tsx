@@ -1,35 +1,24 @@
 import { useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { Plane } from "lucide-react";
+
 import { supabase } from "@/integrations/supabase/client";
+import { useDocumentMeta } from "@/lib/use-document-meta";
 
-export const Route = createFileRoute("/auth")({
-  head: () => ({
-    meta: [
-      { title: "Sign in — Flight Price Notifier" },
-      {
-        name: "description",
-        content: "Sign in or create an account to track flight prices from Taipei.",
-      },
-      { property: "og:title", content: "Sign in — Flight Price Notifier" },
-      {
-        property: "og:description",
-        content: "Sign in or create an account to track flight prices from Taipei.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: AuthPage,
-});
+type Mode = "signin" | "signup";
 
-function AuthPage() {
+export default function AuthPage({ initialMode = "signin" }: { initialMode?: Mode }) {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  useDocumentMeta({
+    title: "Sign in — Flight Price Notifier",
+    description: "Sign in or create an account to track flight prices from Taipei.",
+  });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -47,7 +36,7 @@ function AuthPage() {
         });
         if (error) throw error;
       }
-      navigate({ to: "/app" });
+      navigate("/app");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -109,7 +98,10 @@ function AuthPage() {
             </div>
 
             {error && (
-              <p role="alert" className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <p
+                role="alert"
+                className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+              >
                 {error}
               </p>
             )}
@@ -119,11 +111,7 @@ function AuthPage() {
               disabled={pending}
               className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
             >
-              {pending
-                ? "Please wait…"
-                : mode === "signin"
-                  ? "Sign in / 登入"
-                  : "Sign up / 註冊"}
+              {pending ? "Please wait…" : mode === "signin" ? "Sign in / 登入" : "Sign up / 註冊"}
             </button>
           </form>
 

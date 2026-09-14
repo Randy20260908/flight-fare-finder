@@ -1,28 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { Plane, Radar, MailCheck, CalendarX2 } from "lucide-react";
-import { Reveal } from "@/components/Reveal";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Flight Price Notifier — 機票降價通知" },
-      {
-        name: "description",
-        content:
-          "設定航線與目標價，機票降價就通知你。Set a route and a target price — we email you when the fare drops.",
-      },
-      { property: "og:title", content: "Flight Price Notifier — 機票降價通知" },
-      {
-        property: "og:description",
-        content:
-          "設定航線與目標價，機票降價就通知你。Set a route and a target price — we email you when the fare drops.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: LandingPage,
-});
+import { Reveal } from "@/components/Reveal";
+import { useDocumentMeta } from "@/lib/use-document-meta";
 
 const FEATURES = [
   {
@@ -45,7 +25,13 @@ const FEATURES = [
   },
 ];
 
-function LandingPage() {
+export default function LandingPage() {
+  useDocumentMeta({
+    title: "Flight Price Notifier — 機票降價通知",
+    description:
+      "設定航線與目標價，機票降價就通知你。Set a route and a target price — we email you when the fare drops.",
+  });
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -72,9 +58,7 @@ function LandingPage() {
         />
         <div className="relative mx-auto max-w-5xl px-6 pb-24 pt-24 text-center sm:pt-32">
           <Reveal>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-              Flight Price Notifier
-            </h1>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">Flight Price Notifier</h1>
           </Reveal>
           <Reveal delay={100}>
             <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-foreground/90 sm:text-2xl">
@@ -105,12 +89,8 @@ function LandingPage() {
               <article className="h-full rounded-2xl border border-border bg-card p-6 shadow-sm">
                 <feature.icon className="size-8 text-primary" aria-hidden />
                 <h2 className="mt-4 text-lg font-semibold">{feature.title}</h2>
-                <p className="mt-1 text-sm font-medium text-muted-foreground">
-                  {feature.subtitle}
-                </p>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {feature.body}
-                </p>
+                <p className="mt-1 text-sm font-medium text-muted-foreground">{feature.subtitle}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{feature.body}</p>
               </article>
             </Reveal>
           ))}
@@ -120,9 +100,7 @@ function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-border/60">
         <div className="mx-auto flex max-w-5xl items-center justify-center px-6 py-8">
-          <p className="text-sm text-muted-foreground">
-            © 2026 Flight Price Notifier
-          </p>
+          <p className="text-sm text-muted-foreground">© 2026 Flight Price Notifier</p>
         </div>
       </footer>
     </div>
