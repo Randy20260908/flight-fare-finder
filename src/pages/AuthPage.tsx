@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plane } from "lucide-react";
 
+import { Cloud, Sparkle } from "@/components/SkyDecor";
 import { supabase } from "@/integrations/supabase/client";
 import { useDocumentMeta } from "@/lib/use-document-meta";
 
@@ -45,19 +46,29 @@ export default function AuthPage({ initialMode = "signin" }: { initialMode?: Mod
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <header className="border-b border-border/60">
+    <div className="sky-scene flex min-h-screen flex-col text-foreground">
+      <header className="border-b-[2.5px] border-ink bg-cream/90">
         <div className="mx-auto flex h-16 max-w-5xl items-center px-6">
-          <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <Plane className="size-5 text-primary" aria-hidden />
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 font-display text-lg font-semibold tracking-tight"
+          >
+            <span className="ink-badge size-9 bg-sun">
+              <Plane className="size-[18px] -rotate-12 text-ink" aria-hidden />
+            </span>
             <span>Flight Price Notifier</span>
           </Link>
         </div>
       </header>
 
-      <main className="flex flex-1 items-center justify-center px-6 py-12">
-        <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-lg">
-          <h1 className="text-xl font-semibold tracking-tight">
+      <main className="relative flex flex-1 items-center justify-center overflow-hidden px-6 py-12">
+        <Cloud className="anim-drift absolute left-[6%] top-12 w-28 sm:w-36" />
+        <Cloud className="anim-drift absolute bottom-16 right-[6%] hidden w-32 [animation-delay:-4s] sm:block" />
+        <Sparkle className="absolute right-[18%] top-14 size-5" />
+        <Sparkle className="absolute bottom-24 left-[14%] hidden size-4 sm:block" />
+
+        <div className="ink-card relative w-full max-w-sm p-8">
+          <h1 className="text-2xl font-semibold tracking-tight">
             {mode === "signin" ? "Sign in / 登入" : "Sign up / 註冊"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -68,7 +79,7 @@ export default function AuthPage({ initialMode = "signin" }: { initialMode?: Mod
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
+              <label htmlFor="email" className="mb-1.5 block text-sm font-bold">
                 Email
               </label>
               <input
@@ -78,11 +89,11 @@ export default function AuthPage({ initialMode = "signin" }: { initialMode?: Mod
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/40"
+                className="input-ink w-full px-3 py-2.5 text-sm outline-none"
               />
             </div>
             <div>
-              <label htmlFor="password" className="mb-1.5 block text-sm font-medium">
+              <label htmlFor="password" className="mb-1.5 block text-sm font-bold">
                 Password
               </label>
               <input
@@ -93,14 +104,14 @@ export default function AuthPage({ initialMode = "signin" }: { initialMode?: Mod
                 autoComplete={mode === "signin" ? "current-password" : "new-password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/40"
+                className="input-ink w-full px-3 py-2.5 text-sm outline-none"
               />
             </div>
 
             {error && (
               <p
                 role="alert"
-                className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                className="rounded-xl border-2 border-destructive bg-[#fbe4dc] px-3 py-2 text-sm font-semibold text-destructive"
               >
                 {error}
               </p>
@@ -109,7 +120,7 @@ export default function AuthPage({ initialMode = "signin" }: { initialMode?: Mod
             <button
               type="submit"
               disabled={pending}
-              className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="btn-sun w-full px-4 py-2.5 text-base"
             >
               {pending ? "Please wait…" : mode === "signin" ? "Sign in / 登入" : "Sign up / 註冊"}
             </button>
@@ -123,7 +134,7 @@ export default function AuthPage({ initialMode = "signin" }: { initialMode?: Mod
                 setMode(mode === "signin" ? "signup" : "signin");
                 setError(null);
               }}
-              className="font-medium text-primary underline-offset-4 hover:underline"
+              className="font-bold text-primary underline decoration-2 underline-offset-4 hover:decoration-sun"
             >
               {mode === "signin" ? "Sign up" : "Sign in"}
             </button>

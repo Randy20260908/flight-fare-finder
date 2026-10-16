@@ -13,7 +13,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   if (loading) {
-    return <div className="min-h-screen bg-background" aria-busy="true" />;
+    return <div className="sky-scene min-h-screen" aria-busy="true" />;
   }
 
   if (!user) {

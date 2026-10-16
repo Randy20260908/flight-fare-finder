@@ -6,7 +6,9 @@
 
 /*
  * Design system — Flight Price Notifier
- * Dark theme, violet accent on near-black, Inter typography.
+ * "Sunny departure" theme: a hand-drawn airport morning.
+ * Sky teal, mustard sun, terracotta luggage and dark ink outlines on cloud
+ * white, sampled from the reference illustration. Fredoka headings, Nunito body.
  */
 
 @theme inline {
@@ -38,36 +40,60 @@
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
   --color-glow: var(--glow);
+
+  /* Illustration palette, usable as utilities: bg-sky, text-ink, border-ink … */
+  --color-ink: var(--ink);
+  --color-sky: var(--sky);
+  --color-sky-light: var(--sky-light);
+  --color-sun: var(--sun);
+  --color-rust: var(--rust);
+  --color-cream: var(--cream);
+  --color-pavement: var(--pavement);
+  --color-pavement-dark: var(--pavement-dark);
+
+  --font-display: var(--font-display-stack);
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.875rem;
 
-  /* Near-black with a violet tint */
-  --background: oklch(0.145 0.018 293);
-  --foreground: oklch(0.96 0.008 293);
-  --card: oklch(0.19 0.025 293);
-  --card-foreground: oklch(0.96 0.008 293);
-  --popover: oklch(0.19 0.025 293);
-  --popover-foreground: oklch(0.96 0.008 293);
+  /* Raw illustration colours */
+  --ink: #241820; /* outline ink — near-black warm brown */
+  --sky: #3db4cc; /* morning sky / hoodie teal */
+  --sky-light: #aae1ee; /* haze near the horizon */
+  --sun: #f2c55c; /* mustard jacket + hat */
+  --rust: #aa4f30; /* terracotta suitcase */
+  --cream: #fff6e0; /* hat crown, paper */
+  --pavement: #e4ded3; /* terminal apron */
+  --pavement-dark: #cfc8bb;
 
-  /* Violet accent */
-  --primary: oklch(0.62 0.23 293);
-  --primary-foreground: oklch(0.985 0.004 293);
-  --secondary: oklch(0.24 0.03 293);
-  --secondary-foreground: oklch(0.96 0.008 293);
-  --muted: oklch(0.24 0.03 293);
-  --muted-foreground: oklch(0.7 0.03 293);
-  --accent: oklch(0.28 0.055 293);
-  --accent-foreground: oklch(0.96 0.008 293);
-  --destructive: oklch(0.62 0.21 25);
-  --destructive-foreground: oklch(0.985 0.004 293);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.62 0.23 293);
-  --glow: oklch(0.62 0.23 293 / 35%);
+  /* Semantic tokens (every value below clears WCAG AA against its partner) */
+  --background: #e8f6fa;
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --primary: #1a6f8a; /* deep suitcase blue: 5.7:1 with white, either way round */
+  --primary-foreground: #ffffff;
+  --secondary: var(--cream);
+  --secondary-foreground: var(--ink);
+  --muted: #d6eef4;
+  --muted-foreground: #3a5466;
+  --accent: #fbe7b4;
+  --accent-foreground: var(--ink);
+  --destructive: #9a4529;
+  --destructive-foreground: #ffffff;
+  --border: rgb(36 24 32 / 18%);
+  --input: rgb(36 24 32 / 55%);
+  --ring: var(--sky);
+  /* Near-white morning light: any real yellow blended over the teal sky reads olive */
+  --glow: rgb(255 251 236 / 80%);
+
+  --font-sans: "Nunito", "PingFang TC", "Microsoft JhengHei", ui-sans-serif, system-ui, sans-serif;
+  --font-display-stack:
+    "Fredoka", "Nunito", "PingFang TC", "Microsoft JhengHei", ui-rounded, system-ui, sans-serif;
 }
 
 @layer base {
@@ -81,6 +107,139 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display-stack);
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  /* Page backdrop: open sky fading into haze, like the reference */
+  .sky-scene {
+    background:
+      radial-gradient(120% 70% at 85% 0%, rgb(255 255 255 / 55%), transparent 60%),
+      linear-gradient(180deg, #7fd0e3 0%, var(--sky-light) 45%, var(--background) 100%);
+  }
+
+  /* Hand-inked "sticker" surfaces: thick outline + hard offset shadow */
+  .ink-card {
+    background: var(--card);
+    color: var(--card-foreground);
+    border: 2.5px solid var(--ink);
+    border-radius: calc(var(--radius) + 10px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .ink-badge {
+    display: inline-grid;
+    place-items: center;
+    border: 2.5px solid var(--ink);
+    border-radius: 9999px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  /* Buttons — the press animation is pure CSS, behaviour is untouched */
+  .btn-sun,
+  .btn-paper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 2.5px solid var(--ink);
+    border-radius: 9999px;
+    color: var(--ink);
+    font-family: var(--font-display-stack);
+    font-weight: 600;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease,
+      background-color 0.12s ease;
+  }
+  .btn-sun {
+    background: var(--sun);
+  }
+  .btn-paper {
+    background: #ffffff;
+  }
+  .btn-sun:hover,
+  .btn-paper:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  .btn-sun:hover {
+    background: #f6d077;
+  }
+  .btn-paper:hover {
+    background: var(--cream);
+  }
+  .btn-sun:active,
+  .btn-paper:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .btn-sun:focus-visible,
+  .btn-paper:focus-visible {
+    outline: 3px solid var(--sky);
+    outline-offset: 3px;
+  }
+  .btn-sun:disabled,
+  .btn-paper:disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: 4px 4px 0 var(--ink);
+    cursor: not-allowed;
+  }
+
+  .input-ink {
+    background: #ffffff;
+    border: 2px solid var(--input);
+    border-radius: calc(var(--radius) - 2px);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .input-ink:focus {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 4px rgb(61 180 204 / 35%);
+  }
+
+  /* Apron strip with a dashed taxi line along the bottom of a scene */
+  .runway {
+    background:
+      repeating-linear-gradient(90deg, var(--sun) 0 28px, transparent 28px 56px) center 55% / 100%
+        4px no-repeat,
+      var(--pavement);
+    border-top: 2.5px solid var(--ink);
+  }
+}
+
+/* Clouds drift a few pixels; planes bob. Both stop for reduced motion. */
+@keyframes drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(14px);
+  }
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-4deg);
+  }
+}
+.anim-drift {
+  animation: drift 7s ease-in-out infinite alternate;
+}
+.anim-bob {
+  animation: bob 4s ease-in-out infinite;
 }
 
 /* Subtle fade-up reveal, driven by a tiny IntersectionObserver helper */
@@ -101,6 +260,14 @@
   .reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+  .anim-drift,
+  .anim-bob {
+    animation: none;
+  }
+  .btn-sun,
+  .btn-paper {
     transition: none;
   }
 }
