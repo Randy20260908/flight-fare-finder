@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Plane, LogOut } from "lucide-react";
 
 import { useAuth } from "@/auth/AuthProvider";
+import { PlanCards } from "@/components/PlanCards";
 import { Airliner, Cloud, Luggage, Sparkle } from "@/components/SkyDecor";
 import { supabase } from "@/integrations/supabase/client";
 import { useDocumentMeta } from "@/lib/use-document-meta";
@@ -58,14 +59,14 @@ export default function AppPage() {
         <div className="runway absolute inset-x-0 bottom-0 h-14" aria-hidden />
         <Luggage className="absolute bottom-5 right-[8%] w-20 sm:w-28" />
 
-        <div className="ink-card relative w-full max-w-lg p-10 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Hi {user.email}</h1>
-          <p className="mt-4 leading-relaxed text-muted-foreground">
-            你的航線追蹤儀表板即將上線 — 下一個里程碑會加上訂閱航線的功能。
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground/80">
-            Your dashboard is coming soon. Route-subscription will be added in the next milestone.
-          </p>
+        <div className="relative flex w-full flex-col items-center gap-6">
+          <div className="text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">選擇你想追蹤的航線</h1>
+            <p className="mt-2 text-muted-foreground">
+              設定目標價，機票降到就寄信通知你（{user.email}）
+            </p>
+          </div>
+          {user.email && <PlanCards email={user.email} />}
         </div>
       </main>
     </div>
