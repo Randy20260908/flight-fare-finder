@@ -7,7 +7,7 @@ const API_URL: string =
   "https://o4auovkfo6.execute-api.us-east-1.amazonaws.com";
 
 type Plan = {
-  plan_name: "tokyo" | "seoul";
+  plan_name: "tokyo" | "seoul" | "iceland";
   label: string;
   route: string;
   hint: number;
@@ -16,6 +16,7 @@ type Plan = {
 const PLANS: Plan[] = [
   { plan_name: "tokyo", label: "台北 ✈ 東京", route: "TPE-TYO", hint: 7368 },
   { plan_name: "seoul", label: "台北 ✈ 首爾", route: "TPE-SEL", hint: 7071 },
+  { plan_name: "iceland", label: "台北 ✈ 冰島", route: "TPE-REK", hint: 28502 },
 ];
 
 type Subscription = { route: string; target_price: number };
@@ -156,13 +157,13 @@ export function PlanCards({ email }: { email: string }) {
   });
 
   return (
-    <div className="w-full max-w-3xl">
+    <div className="w-full max-w-5xl">
       {isError && (
         <p role="alert" className="mb-4 text-center text-sm font-semibold text-destructive">
           無法載入你的訂閱狀態，請重新整理再試一次。
         </p>
       )}
-      <div className={`grid gap-6 sm:grid-cols-2 ${isLoading ? "opacity-60" : ""}`}>
+      <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${isLoading ? "opacity-60" : ""}`}>
         {PLANS.map((plan) => (
           <PlanCard
             key={`${plan.route}-${data?.find((s) => s.route === plan.route)?.target_price ?? "none"}`}
